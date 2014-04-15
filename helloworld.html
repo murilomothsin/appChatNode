@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>nowjs test</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="nowjs/now.js"></script>
+
+<script>
+function empty(v){
+  if (v==null || v==0 || v=='' || v==""){
+      return true;
+  }
+  return false;
+}
+
+function sendMessage(){
+  now.distributeMessage($("#text-input").val());
+  $("#text-input").val("");
+}
+
+$(document).ready(function(){
+
+  now.name = prompt("Qual seu Nome?", "nome");
+
+  now.receiveMessage = function(name, message){
+    if (message.length > 1 && !empty(message)){
+      $("#messages").append("<hr><b>" + name + ":</b> " + message);
+      $( "#messages" ).scrollTop( $("#messages").scrollTop() + 350 );
+    }else{
+      console.log("mensagem vazia");
+    }
+  }
+
+  now.onlineUser = function(name){
+    console.log(name);
+    $("#online-users").append("<b>" + name + ":</b><hr>");
+  }
+
+  $( "#text-input" ).keypress(function( event ) {
+    if ( event.which == 13 ) {
+        sendMessage();
+    }
+  });
+
+  $("#send-button").click(function(){
+    sendMessage();
+  });
+
+});
+</script>
+
+<style type="text/css">
+.message-box {
+  border: 1px solid #CCC;
+  width: 450px;
+  height: 300px;
+  overflow: auto;
+}
+.online-box {
+  border: 1px solid #CCC;
+  width: 450px;
+  height: 300px;
+  overflow: auto;
+  float: right;
+}
+#text-input {
+  width: 400px;
+}
+</style>
+
+</head>
+
+<body>
+<div id="messages" class="message-box"></div>
+<div id="online-users" class="online-box"></div>
+<input type="text" id="text-input">
+<input type="button" value="Send" id="send-button">
+</body>
+</html>
